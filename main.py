@@ -151,7 +151,7 @@ else:
     except:
         print("Results are saved to existing directory: " + path)
 
-fname = "CellposeAllNucleiCentroids.txt"
+fname = str(imageId)+"_CellposeAllNucleiCentroids.txt"
 np.savetxt(path + fname,all.T, delimiter=',',fmt='%f')
 
 ## Refresh connection and get group name of image
