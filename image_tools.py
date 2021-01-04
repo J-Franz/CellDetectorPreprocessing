@@ -5,14 +5,14 @@ from skimage.segmentation import find_boundaries
 from skimage.measure import label, regionprops
 import numpy as np
 
-def get_coordinates(tile, plot=False):
+def get_coordinates(tile, plot=False, gpu=False):
     if not tile.flags.writeable:
         tile = tile.copy()
-    log_tile = np.log(tile)
+    log_tile = np.log(tile+1)
     log_tile[np.isinf(log_tile)] = 10 ** -16
     # DEFINE CELLPOSE MODEL
     # model_type='cyto' or model_type='nuclei'
-    cellpose = cellpose_models.Cellpose(gpu=False, model_type='nuclei', net_avg=False)
+    cellpose = cellpose_models.Cellpose(gpu=gpu, model_type='nuclei', net_avg=False)
 
     # define CHANNELS to run segementation on
     # grayscale=0, R=1, G=2, B=3
@@ -40,7 +40,7 @@ def get_coordinates(tile, plot=False):
         imgout = tile.copy()
         imgout[outX, outY] = np.array([np.max(tile)])
         plt.imshow(imgout)
-
+    del cellpose
     label_img = label(masks[0])
     regions = regionprops(label_img)
     list_x_coords = []
@@ -54,3 +54,16 @@ def get_coordinates(tile, plot=False):
         list_x_coords.append(x_position)
         list_y_coords.append(y_position)
     return [list_x_coords, list_y_coords]
+
+
+def delete_cells_at_border(x_coords_nuclei, y_coords_nuclei, overlap, tile_coordinates):
+    too_close_to_x0 = x_coords_nuclei < overlap / 2. + 1
+    too_close_to_xmax = (x_coords_nuclei > tile_coordinates['crop_width'] - overlap / 2. - 1)
+    too_close_to_y0 = y_coords_nuclei < overlap / 2. + 1
+    too_close_to_ymax = (y_coords_nuclei > tile_coordinates['crop_height'] - overlap / 2. - 1)
+
+    x_coords_nuclei = np.delete(x_coords_nuclei, np.argwhere(
+        too_close_to_x0 + too_close_to_xmax + too_close_to_y0 + too_close_to_ymax))
+    y_coords_nuclei = np.delete(y_coords_nuclei, np.argwhere(
+        too_close_to_x0 + too_close_to_xmax + too_close_to_y0 + too_close_to_ymax))
+    return x_coords_nuclei, y_coords_nuclei

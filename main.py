@@ -2,187 +2,155 @@ import sys
 import os
 import time
 from scipy.stats import skew
-## This is to connect to omero
-from omero_tools import refresh_omero_session
+# This is to connect to omero
+from omero_tools import refresh_omero_session, get_pixels, get_image, get_tile_coordinates, UploadArrayAsTxtToOmero
 import numpy as np
 
-## This is the actual application of cellpose
-from image_tools import get_coordinates
+# This is the actual application of cellpose
+from image_tools import get_coordinates, delete_cells_at_border
+from utils import define_path
 
-## Get credentials from first argument
-#run like main.py password
 
-user = "Franz"
-pw = sys.argv[1]
-imageId = sys.argv[2]
-local = sys.argv[3]
+def main():
+    ## Get credentials from first argumentma
+    # run like main.py password
+    user = "Franz"
+    pw = sys.argv[1]
+    imageId = sys.argv[2]
+    local = (sys.argv[3] == "True")
+    if local:
+        use_gpu = False
+        plot_cellpose = False
+    else:
+        use_gpu = True  # requires cellpose to be installed in gpu usable fashion
+        plot_cellpose = False  # should be false for cluster
+    try:
+        c_fluorescence = int(sys.argv[4])
+    except IndexError:
+        c_fluorescence = None
+    try:
+        c_dapi = int(sys.argv[5])
+    except IndexError:
+        c_dapi = None
+    # establish connection
+    # Load image for the first time
 
-##establish connection
-conn = refresh_omero_session(None,user,pw)
-conn.getGroupFromContext()
-
-## Load image for the first time
-try:
-    conn.SERVICE_OPTS.setOmeroGroup('-1')
-    image = conn.getObject("Image", imageId)
-    group_id = image.getDetails().getGroup().getId()
-    group_name = image.getDetails().getGroup().getName()
-    print("Switched Group to Group of image: ", group_id, " with name: ", group_name)
-except:
-    print("Unable to load image for the first time.")
-    sys.exit(1)
-
-# Set up plan to iterate over whole slide
-maximum_crop_size = 2000
-overlap = 100
-evaluated_crop_size = maximum_crop_size-overlap
-nx_tiles =int(image.getSizeX()/evaluated_crop_size)+1
-ny_tiles =int(image.getSizeY()/evaluated_crop_size)+1
-n_runs = ny_tiles*nx_tiles
-width=101
-height: int=101
-half_width=int(width/2.)
-half_height=int(height/2.)
-c_dapi = 0
-c_fluorescence = 1
-
-print("We will start to crop the image in " + str(n_runs)+ " tiles and start the analysis now.")
-
-list_all_x = []
-list_all_y = []
-list_all_mean = []
-list_all_median= []
-list_all_var = []
-list_all_skew = []
-
-n_run = 0
-for nx in range(nx_tiles):
-    for ny in range(ny_tiles):
-        print("I just started with tile nr.:"+ str(nx*ny_tiles+ny))
-        start_time = time.time()
-        # To avoid lost connection reconnect every time before downloading
-        conn.close()
-        conn = refresh_omero_session(conn,user,pw)
+    with refresh_omero_session(None, user, pw) as conn:
+        conn.getGroupFromContext()
         conn.SERVICE_OPTS.setOmeroGroup('-1')
         image = conn.getObject("Image", imageId)
         group_id = image.getDetails().getGroup().getId()
-        conn.setGroupForSession(group_id)
-        pixels = image.getPrimaryPixels()
+        group_name = image.getDetails().getGroup().getName()
+        max_c = image.getSizeC()-1 #counting starts from 0
+        print("Switched Group to Group of image: ", group_id, " with name: ", group_name)
 
-        # Define local crop area
-        current_crop_x = nx*evaluated_crop_size
-        current_crop_y = ny*evaluated_crop_size
-        crop_width= min(maximum_crop_size,int(image.getSizeX()-current_crop_x))
-        crop_height=min(maximum_crop_size,int(image.getSizeY()-current_crop_y))
+        # Set up plan to iterate over whole slide
+        # TODO: make dict, save in h5 as metadata
 
-        #display current crop for potential debugging
-        print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
-              str(crop_width),str(crop_height),str(current_crop_x),str(current_crop_y))
+        maximum_crop_size = 1000
+        overlap = 100
+        evaluated_crop_size = maximum_crop_size - overlap
+        nx_tiles = int(image.getSizeX() / evaluated_crop_size) + 1
+        ny_tiles = int(image.getSizeY() / evaluated_crop_size) + 1
+        n_runs = ny_tiles * nx_tiles
+        width = 101
+        height: int = 101
+        half_width = int(width / 2.)
+        half_height = int(height / 2.)
+        if c_dapi is None:
+            c_dapi=0
+        # TODO: get c_fluorescence
+        if c_fluorescence is None:
+            c_fluorescence = max_c
 
-        #load Dapi Channel and Fluorescence channel
-        tile_dapi = pixels.getTile(0, theC=c_dapi, theT=0,
-                                   tile=[current_crop_x, current_crop_y, crop_width, crop_height])
-        tile_fluorescence = pixels.getTile(0, theC=c_fluorescence, theT=0,
-                                           tile=[current_crop_x, current_crop_y, crop_width, crop_height])
+    print("We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.")
 
-        # Apply cellpose to extract coordinates, potentially one could also save masks and boundaries
-        [list_nuclei_x_coords, list_nuclei_y_coords] = get_coordinates(tile_dapi, False)
+    os.system("echo \"We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.\"")
 
-        # cast list to numpy
-        x_coords_nuclei = np.array(list_nuclei_x_coords)
-        y_coords_nuclei = np.array(list_nuclei_y_coords)
+    path = define_path(local)
 
-        # take only nuclei within border of overlap/2
-        # also take into account that cropped regions might be smaller than maximum_crop_size
+    os.system("echo \"We will store the image in " + path + " tiles and start the analysis now.\"")
 
-        too_close_to_x0 = x_coords_nuclei<overlap/2.
-        too_close_to_xmax = (x_coords_nuclei>maximum_crop_size-overlap/2.)+\
-                            (x_coords_nuclei>image.getSizeX()-overlap/2.)
+    list_all_x = []
+    list_all_y = []
+    list_all_mean = []
+    list_all_median = []
+    list_all_var = []
+    list_all_skew = []
 
-        too_close_to_y0 = y_coords_nuclei < overlap / 2.
-        too_close_to_ymax = (y_coords_nuclei > maximum_crop_size - overlap / 2.) +\
-                            (y_coords_nuclei > image.getSizeY() - overlap / 2.)
+    n_run = 0
 
-        x_coords_nuclei = np.delete(x_coords_nuclei,np.argwhere(too_close_to_x0+too_close_to_xmax+too_close_to_y0+too_close_to_ymax))
-        y_coords_nuclei = np.delete(y_coords_nuclei, np.argwhere(too_close_to_x0 + too_close_to_xmax + too_close_to_y0 + too_close_to_ymax))
+    for nx in range(nx_tiles):  # [nx_tiles-1]:#
+        for ny in range(ny_tiles):  # [ny_tiles-2]:#
+            print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
+            start_time = time.time()
+            # To avoid lost connection reconnect every time before downloading
+            with refresh_omero_session(None, user, pw) as conn:
+                image = get_image(conn, user, pw, imageId)
+                pixels = get_pixels(conn, image)
 
+                # Define local crop area
+                tile_coordinates = get_tile_coordinates(image, nx, ny, evaluated_crop_size, maximum_crop_size)
 
-        tmp_array = np.zeros((width, height))
-        for id_x,x in enumerate(x_coords_nuclei):
-            temp_crop_x =(x - half_width)
-            temp_crop_y =(y_coords_nuclei[id_x] - half_height)
-            tmp_array = tile_fluorescence[temp_crop_x:(temp_crop_x+width), temp_crop_y:(temp_crop_y+height)]
-            list_all_mean.append(np.mean(tmp_array.flatten()))
-            list_all_median.append(np.median(tmp_array.flatten()))
-            list_all_var.append(np.var(tmp_array.flatten()))
-            list_all_skew.append(skew(tmp_array.flatten()))
+                # display current crop for potential debugging
+                print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
+                      tile_coordinates)
 
-            # transform from local coordinates of tile to coordinates of wsi
+                # load Dapi Channel and Fluorescence channel
+                # getTile switches width and height...
+                # this is compensated by get_coordinates to return switched coordinates
+                tile_dapi = pixels.getTile(0, theC=c_dapi, theT=0, tile=tile_coordinates.values())
+                tile_fluorescence = pixels.getTile(0, theC=c_fluorescence, theT=0, tile=tile_coordinates.values())
 
-        x_coords_nuclei = x_coords_nuclei + current_crop_x
-        y_coords_nuclei = y_coords_nuclei + current_crop_y
+            # Apply cellpose to extract coordinates, potentially one could also save masks and boundaries
+            [list_nuclei_x_coords, list_nuclei_y_coords] = get_coordinates(tile_dapi, plot_cellpose, use_gpu)
 
-        list_all_x.append(x_coords_nuclei)
-        list_all_y.append(y_coords_nuclei)
+            # cast list to numpy
+            x_coords_nuclei = np.array(list_nuclei_x_coords)
+            y_coords_nuclei = np.array(list_nuclei_y_coords)
 
-        '''    
-        tmp_array = np.zeros((width, height))
-        tmp_array[:, :] = pixels.getTile(0, theC=1, theT=0,
-                                             tile=[x - half_width, y_coords_nuclei[id_x] - half_height, width,
-                                                   height])'''
+            # take only nuclei within border of overlap/2+1
+            # also take into account that cropped regions might be smaller than maximum_crop_size
 
-        stop_time = time.time()
-        print("Processing of this tile took: " +str(stop_time-start_time))
-print(n_run)
-all_x = np.concatenate(list_all_x)
-all_y = np.concatenate(list_all_y)
-all_mean = list_all_mean
-all_median = list_all_median
-all_var =  list_all_var
-all_skew = list_all_skew
+            x_coords_nuclei, y_coords_nuclei = delete_cells_at_border(x_coords_nuclei, y_coords_nuclei, overlap, tile_coordinates)
 
-all = np.array((all_x,all_y, all_mean, all_median, all_var, all_skew),dtype=float)
-if local:
-    path = ""
-else:
-    path="/scratch/jfranz/Analysis/Cellpose/"+group_name+"/"
-    try:
-        os.mkdir(path)
-    except:
-        print("Results are saved to existing directory: " + path)
+            for id_x, x in enumerate(x_coords_nuclei):
+                temp_crop_x = (x - half_width)
+                temp_crop_y = (y_coords_nuclei[id_x] - half_height)
+                tmp_array = tile_fluorescence[temp_crop_y:(temp_crop_y + height), temp_crop_x:(temp_crop_x + width)]
 
-fname = str(imageId)+"_CellposeAllNucleiCentroids.txt"
-np.savetxt(path + fname,all.T, delimiter=',',fmt='%f')
+                list_all_mean.append(np.mean(tmp_array.flatten()))
+                list_all_median.append(np.median(tmp_array.flatten()))
+                list_all_var.append(np.var(tmp_array.flatten()))
+                list_all_skew.append(skew(tmp_array.flatten()))
 
-## Refresh connection and get group name of image
-conn.close()
-conn = refresh_omero_session(conn, user, pw)
-conn.SERVICE_OPTS.setOmeroGroup('-1')
-image = conn.getObject("Image", imageId)
-group_name = image.getDetails().getGroup().getName()
+                # transform from local coordinates of tile to coordinates of wsi
 
-# Upload file via omero client in bash system steered by python to the omero server and link to the image
+            x_coords_nuclei = x_coords_nuclei + tile_coordinates['current_crop_x']
+            y_coords_nuclei = y_coords_nuclei + tile_coordinates['current_crop_y']
 
-login_command = "omero login "+user+"@134.76.18.202 -w "+pw+" -g \"" + group_name + "\""
+            list_all_x.append(x_coords_nuclei)
+            list_all_y.append(y_coords_nuclei)
 
-stream = os.popen(login_command)
-output = stream.read()
-command = "omero upload " + path + fname
-stream = os.popen(command)
-output = stream.read()
-print(output)
-command = "omero obj new FileAnnotation file=" + output
-stream = os.popen(command)
-output = stream.read()
-print(output)
-command = "omero obj new ImageAnnotationLink parent="+"Image:"+str(imageId)+ " child=" + output
-stream = os.popen(command)
-output = stream.read()
-print(output)
+            stop_time = time.time()
+            report = "Processing of this tile took: %s" % (stop_time - start_time)
+            os.system("echo \"%s\"" % report)
+    print(n_run)
+
+    list_all_x = np.concatenate(list_all_x)
+    list_all_y = np.concatenate(list_all_y)
+
+    concat_array = np.array((list_all_x,
+                             list_all_y,
+                             list_all_mean,
+                             list_all_median,
+                             list_all_var,
+                             list_all_skew), dtype=float)
+
+    fname = str(imageId) + "_CellposeAllNucleiCentroidsV2_c" + str(c_fluorescence) + ".txt"
+    verbose_upload = True
+    UploadArrayAsTxtToOmero(path + fname, concat_array.T, group_name, imageId, pw, user, verbose_upload)
 
 
-
-stream.close()
-conn.close()
-
-
+if __name__ == '__main__':
+    main()
