@@ -3,6 +3,8 @@ from collections import OrderedDict
 import numpy as np
 
 import os
+
+import omero
 from omero.gateway import BlitzGateway
 
 
@@ -33,15 +35,17 @@ def refresh_omero_session(conn,user,pw,verbose=False):
     return conn
 
 
-def get_pixels(conn, image):
+def get_pixels(conn, image, verbose = True):
     group_id = image.getDetails().getGroup().getId()
     conn.setGroupForSession(group_id)
+    if verbose ==True:
+        group_name = image.getDetails().getGroup().getName()
+        print("Switched Group to Group of image: ", group_id, " with name: ", group_name)
     pixels = image.getPrimaryPixels()
     return pixels
 
 
-def get_image(conn, user, pw, imageId):
-    conn = refresh_omero_session(conn, user, pw)
+def get_image(conn,  imageId):
     conn.SERVICE_OPTS.setOmeroGroup('-1')
     image = conn.getObject("Image", imageId)
     return image
@@ -65,7 +69,7 @@ def execute_command(command, verbose=False):
             print(output)
     return output
 
-def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose):
+def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
     login_command = "omero login " + user + "@134.76.18.202 -w " + pw + " -g \"" + group_name + "\""
@@ -76,3 +80,48 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
     output = execute_command(command)
     command = "omero obj new ImageAnnotationLink parent=" + "Image:" + str(imageId) + " child=" + output
     return execute_command(command, verbose=verbose)
+
+
+def check_fname_omero(fname, image):
+    already_extracted = False
+    for ann in image.listAnnotations():
+        filename_ = ann.getFileName()
+        if filename_ == fname:
+            already_extracted = True
+    return already_extracted
+
+
+def make_omero_file_available(image, fname, path):
+    # image: provide image object during active omero session
+    # fname: string of the file name annotation to download
+    # path: path where to save annotation
+
+    if os.path.exists(path+fname):
+        print("File %s already saved in directory %s." %(fname, path))
+        successful = True
+    else:
+        successful = download_fname_from_omero_image_annotations(fname, image, path)
+
+    if successful == False:
+        print("File neither in directory nor linked on omero.")
+        return 1
+    else:
+        return 0
+
+
+def download_fname_from_omero_image_annotations(fname, image, path):
+    successful = False
+    for ann in image.listAnnotations():
+        if isinstance(ann, omero.gateway.FileAnnotationWrapper):
+            if ann.getFile().getName() == fname:
+                print("File ID:", ann.getFile().getId(), ann.getFile().getName(), \
+                      "Size:", ann.getFile().getSize())
+                file_path = os.path.join(path, ann.getFile().getName())
+
+                with open(str(file_path), 'wb') as f:
+                    print("\nDownloading file to", file_path, "...")
+                    for chunk in ann.getFileInChunks():
+                        f.write(chunk)
+                print("File downloaded!")
+                successful = True
+    return successful

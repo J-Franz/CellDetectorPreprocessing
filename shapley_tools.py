@@ -31,6 +31,6 @@ def analyse_polygon_histogram(polygon,tile):
     x, y = x.flatten(), y.flatten()
     points = np.vstack((x, y)).T
     grid = polygon_path_matplot.contains_points(points)
-    grid = grid.reshape((crop_height, crop_width))
+    grid = grid.reshape(( crop_width,crop_height))
     # calculate ECDF of median filtered image within polygon (defined by boolean grid)
     return ECDF(tile[grid])
