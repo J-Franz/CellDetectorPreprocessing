@@ -1,5 +1,5 @@
 import numpy as np
-from omero_tools import refresh_omero_session
+from JonasTools.omero_tools import refresh_omero_session
 import sys
 import os
 import omero

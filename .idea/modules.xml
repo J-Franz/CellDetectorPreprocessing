@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Microglia.iml" filepath="$PROJECT_DIR$/.idea/Microglia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MicrogliaLabels/.idea/MicrogliaLabels.iml" filepath="$PROJECT_DIR$/../MicrogliaLabels/.idea/MicrogliaLabels.iml" />
     </modules>
   </component>
 </project>

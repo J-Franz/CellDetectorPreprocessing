@@ -96,7 +96,7 @@ def make_omero_file_available(image, fname, path):
     # fname: string of the file name annotation to download
     # path: path where to save annotation
 
-    if os.path.exists(path+fname):
+    if os.path.isfile(path+fname):
         print("File %s already saved in directory %s." %(fname, path))
         successful = True
     else:

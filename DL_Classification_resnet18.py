@@ -1,14 +1,10 @@
 from torch.utils.data import Dataset
-from torchvision.transforms import ToTensor
 import torch
 import torch.utils.data as TData
-import torchvision.models as models
 import numpy as np
-from omero_tools import refresh_omero_session
+from JonasTools.omero_tools import refresh_omero_session
 import os
-import omero
-from skimage.exposure import rescale_intensity
-import matplotlib.pyplot as plt
+
 
 class Image101Dataset(Dataset):
     def __init__(self, path, training_image_ids, credentials, local = False,transform=None):
@@ -116,11 +112,9 @@ from torch.nn import Module
 from torch.nn.init import kaiming_uniform_
 from torch.nn.init import xavier_uniform_
 
-from torch.optim import Adam
 from torch.optim import SGD
 from torch.nn import BCEWithLogitsLoss
-from torch.nn import CrossEntropyLoss
-from torch.nn import MSELoss
+
 
 # model definition
 class CNN(Module):
@@ -218,12 +212,8 @@ print(len(train))
 from __future__ import print_function, division
 
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.optim import lr_scheduler
 import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
+from torchvision import models
 import matplotlib.pyplot as plt
 import time
 import os

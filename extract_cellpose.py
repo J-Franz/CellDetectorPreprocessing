@@ -5,7 +5,7 @@ import numpy as np
 from scipy.stats import skew
 
 from image_tools import get_coordinates, delete_cells_at_border
-from omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates, UploadArrayAsTxtToOmero, \
+from JonasTools.omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates, UploadArrayAsTxtToOmero, \
     check_fname_omero, make_omero_file_available
 from utils import define_path, extract_system_arguments, unpack_parameters
 
