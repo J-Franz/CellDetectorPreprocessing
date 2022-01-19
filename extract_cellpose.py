@@ -7,7 +7,7 @@ from scipy.stats import skew
 from image_tools import get_coordinates, delete_cells_at_border
 from JonasTools.omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates, UploadArrayAsTxtToOmero, \
     check_fname_omero, make_omero_file_available
-from utils import define_path, extract_system_arguments, unpack_parameters
+from utils import extract_system_arguments, unpack_parameters
 
 
 def extract_cellpose_nucleiV2(sys_arguments, parameters):
@@ -25,8 +25,12 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
     evaluated_crop_size, half_height, half_width, height, maximum_crop_size, overlap, width = unpack_parameters(
         parameters)
 
-    path = define_path(local)
-    # establish connection
+    # CORRECT
+    if local==True:
+        cellpose_path = "/home/jonas/SCRATCH2/Analysis/MicrogliaDepletionPreprocessed/Cellpose/"
+        #cellpose_path = "/share/Work/Neuropathologie/MicrogliaDetection/Playground/MicrogliaDepletionPreprocessed/Cellpose/"
+    else:
+        cellpose_path = "/scratch2/jfranz/Analysis/MicrogliaDepletionPreprocessed/Cellpose/"    # establish connection
     # Load image for the first time
 
     with refresh_omero_session(None, user, pw) as conn:
@@ -47,14 +51,14 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
         already_extracted = check_fname_omero(fname, image)
 
         if already_extracted:
-            make_omero_file_available(image, fname, path)
+            make_omero_file_available(image, fname, cellpose_path)
             return 0
     print("We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.")
 
     os.system("echo \"We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.\"")
 
 
-    os.system("echo \"We will store the image in " + path + " tiles and start the analysis now.\"")
+    os.system("echo \"We will store the image in " + cellpose_path + " tiles and start the analysis now.\"")
 
     list_all_x = []
     list_all_y = []
@@ -136,7 +140,7 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
                              list_all_skew), dtype=float)
 
     verbose_upload = True
-    UploadArrayAsTxtToOmero(path + fname, concat_array.T, group_name, imageId, pw, user, verbose_upload)
+    UploadArrayAsTxtToOmero(cellpose_path + fname, concat_array.T, group_name, imageId, pw, user, verbose_upload)
     return 1
 
 

@@ -60,11 +60,11 @@ if __name__ == '__main__':
 
     parameters = pack_parameters()
 
-    extraction = extract_cellpose_nucleiV2(sys_arguments, parameters)
-    if extraction is 0:
-        print("Cell pose coordinates already extracted.")
-    elif extraction is 1:
-        print("Cell pose coordinates are now extracted and saved to omero.")
+    #extraction = extract_cellpose_nucleiV2(sys_arguments, parameters)
+    #if extraction is 0:
+    #    print("Cell pose coordinates already extracted.")
+    #elif extraction is 1:
+    #    print("Cell pose coordinates are now extracted and saved to omero.")
 
     zarr_storage = save_omero_to_zarr(sys_arguments, parameters)
     if zarr_storage is 0:
@@ -80,5 +80,5 @@ if __name__ == '__main__':
         print("CDF is now extracted and saved to omero.")
 
     nib_saving = save_channel_to_nib_file(sys_arguments, parameters)
-    print(nib_saving)
+    print(nib_saving[0])
 

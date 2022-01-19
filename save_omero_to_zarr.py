@@ -3,7 +3,7 @@ import time
 import zarr
 
 from JonasTools.omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates
-from utils import extract_system_arguments, unpack_parameters, define_path
+from utils import extract_system_arguments, unpack_parameters
 
 
 def save_omero_to_zarr(sys_arguments, parameters):
@@ -32,15 +32,21 @@ def save_omero_to_zarr(sys_arguments, parameters):
     if c_fluorescence is None:
         c_fluorescence = max_c
 
-    path = define_path(local)
+    if local==True:
+        zarr_path = "/home/jonas/SCRATCH2/Analysis/MicrogliaDepletionPreprocessed/Zarr/"
+        #zarr_path = "/share/Work/Neuropathologie/MicrogliaDetection/Playground/MicrogliaDepletionPreprocessed/Zarr/"
+    else:
+        zarr_path = "/scratch2/jfranz/Analysis/MicrogliaDepletionPreprocessed/Zarr/"
+    os.makedirs(zarr_path, exist_ok=True)
+    print("Results are saved to directory: " + zarr_path)
 
     fname = str(imageId) + "_image.zarr"
-    for filename_ in os.listdir(path):
+    for filename_ in os.listdir(zarr_path):
         if filename_ == fname:
             return 0
 
     # initialize zarr file
-    z1 = zarr.open(path + fname, mode='w', shape=(size_x, size_y, size_c), chunks=(500, 500), dtype='i2')
+    z1 = zarr.open(zarr_path + fname, mode='w', shape=(size_x, size_y, size_c), chunks=(500, 500), dtype='i2')
 
     os.system("echo \"We will start to crop the image in " + str(n_runs) + " tiles and start saving as Zarr now.\"")
 

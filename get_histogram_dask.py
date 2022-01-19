@@ -14,7 +14,7 @@ import dask.array as da
 
 ## Get credentials from first argumentma
 # run like main.py password
-from utils import extract_system_arguments, unpack_parameters, define_path
+from utils import extract_system_arguments, unpack_parameters
 
 
 def get_histogram_dask(sys_arguments, parameters):
@@ -66,10 +66,16 @@ def get_histogram_dask(sys_arguments, parameters):
     if c_fluorescence is None:
         c_fluorescence = max_c
 
-    path = define_path(local)
+    if local == True:
+
+        zarr_path = "/home/jonas/SCRATCH2/Analysis/MicrogliaDepletionPreprocessed/Zarr/"
+        CDF_path = "/home/jonas/SCRATCH2/Analysis/MicrogliaDepletionPreprocessed/CDF/"
+    else:
+        zarr_path = "/scratch2/jfranz/Analysis/MicrogliaDepletionPreprocessed/Zarr/"
+        CDF_path = "/scratch2/jfranz/Analysis/MicrogliaDepletionPreprocessed/CDF/"
     fname = str(imageId) + "_image.zarr"
 
-    zarr_image = da.from_zarr(path+fname)
+    zarr_image = da.from_zarr(zarr_path+fname)
     # Set up plan to iterate over slide
     evaluated_crop_size = 2000#maximum_crop_size  # to load non_overlapping
 
@@ -81,7 +87,7 @@ def get_histogram_dask(sys_arguments, parameters):
             already_extracted = check_fname_omero(fname_upload, image)
 
             if already_extracted:
-                make_omero_file_available(image, fname_upload, path)
+                make_omero_file_available(image, fname_upload, CDF_path)
                 continue
         for hole in polygon_hole_list:
             ptissue=ptissue.difference(hole)
@@ -102,7 +108,7 @@ def get_histogram_dask(sys_arguments, parameters):
         os.system("echo \"We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.\"")
 
 
-        os.system("echo \"We will store the image in " + path + " tiles and start the analysis now.\"")
+        os.system("echo \"We will store the CDF in " + CDF_path + " tiles and start the analysis now.\"")
 
         list_all_cdfs = []
         list_analysed_area = []
@@ -168,5 +174,5 @@ def get_histogram_dask(sys_arguments, parameters):
 
         ECDF = np.sum(all_ecdfs * weighted_areas, 1) / np.sum(all_ecdfs * weighted_areas, 1).max()
 
-        UploadArrayAsTxtToOmero(path + fname_upload, ECDF, group_name, imageId, pw, user)
+        UploadArrayAsTxtToOmero(CDF_path + fname_upload, ECDF, group_name, imageId, pw, user)
         return 0
