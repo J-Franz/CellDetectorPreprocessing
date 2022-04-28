@@ -114,6 +114,14 @@ def get_histogram_dask(sys_arguments, parameters):
         list_analysed_area = []
 
         n_run = 0
+        if n_runs > 500:
+            mc_sampling = True
+            os.system("echo \"Since we found more than 500 tiles to process, "
+                      "histogram will be estimated via 10\% Monte Carlo Sampling.\"")
+        else:
+            mc_sampling = False
+            print("Since we found less than 500 tiles to process, histogram will be estimated via 100\% Sampling.")
+
         for nx in range(nx_tiles):
             for ny in range(ny_tiles):
                 print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
@@ -150,21 +158,20 @@ def get_histogram_dask(sys_arguments, parameters):
                         for polygon in analyse_polygon:
                             # save area of local polygon
                             list_analysed_area.append(polygon.area)
-                            local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile)
+                            local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile,mc_sampling)
                             list_all_cdfs.append(local_ecdf)
 
                     else:
 
                         # save area of local polygon
                         list_analysed_area.append(analyse_polygon.area)
-                        local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile)
+                        local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile,mc_sampling)
                         list_all_cdfs.append(local_ecdf)
-
 
                     stop_time = time.time()
                     report = "Processing of this tile took: %s" %(stop_time-start_time)
                     os.system("echo \"%s\"" %report)
-                n_run +=1
+                n_run += 1
 
         all_ecdfs = np.ones((len(pixel_range),len(list_all_cdfs)))
         for ecdf_id,ecdf in enumerate(list_all_cdfs):

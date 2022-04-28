@@ -85,9 +85,10 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
 def check_fname_omero(fname, image):
     already_extracted = False
     for ann in image.listAnnotations():
-        filename_ = ann.getFileName()
-        if filename_ == fname:
-            already_extracted = True
+        if ann.OMERO_TYPE == omero.model.FileAnnotationI:
+            filename_ = ann.getFileName()
+            if filename_ == fname:
+                already_extracted = True
     return already_extracted
 
 
