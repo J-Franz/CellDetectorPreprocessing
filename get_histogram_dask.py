@@ -11,6 +11,7 @@ from shapely import affinity
 from scipy.ndimage import median_filter
 from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
 import dask.array as da
+from statsmodels.distributions.empirical_distribution import ECDF
 
 ## Get credentials from first argumentma
 # run like main.py password
@@ -156,17 +157,18 @@ def get_histogram_dask(sys_arguments, parameters):
 
                     if analyse_polygon.geom_type=='MultiPolygon':
                         for polygon in analyse_polygon:
-                            # save area of local polygon
-                            list_analysed_area.append(polygon.area)
                             local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile,mc_sampling)
-                            list_all_cdfs.append(local_ecdf)
-
+                            if type(local_ecdf)==ECDF:
+                                list_all_cdfs.append(local_ecdf)
+                                # save area of local polygon
+                                list_analysed_area.append(polygon.area)
                     else:
-
-                        # save area of local polygon
-                        list_analysed_area.append(analyse_polygon.area)
                         local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile,mc_sampling)
-                        list_all_cdfs.append(local_ecdf)
+                        if type(local_ecdf)==ECDF:
+                            list_all_cdfs.append(local_ecdf)
+                            # save area of local polygon
+                            list_analysed_area.append(analyse_polygon.area)
+
 
                     stop_time = time.time()
                     report = "Processing of this tile took: %s" %(stop_time-start_time)
@@ -179,7 +181,7 @@ def get_histogram_dask(sys_arguments, parameters):
 
         weighted_areas =np.array(list_analysed_area)
 
-        ECDF = np.sum(all_ecdfs * weighted_areas, 1) / np.sum(all_ecdfs * weighted_areas, 1).max()
+        ECDF_all = np.sum(all_ecdfs * weighted_areas, 1) / np.sum(all_ecdfs * weighted_areas, 1).max()
 
-        UploadArrayAsTxtToOmero(CDF_path + fname_upload, ECDF, group_name, imageId, pw, user)
+        UploadArrayAsTxtToOmero(CDF_path + fname_upload, ECDF_all, group_name, imageId, pw, user)
         return 0

@@ -40,4 +40,7 @@ def analyse_polygon_histogram(polygon,tile, mc_sampling=False):
         flat_values_of_roi = tile[grid][::10]
     else:
         flat_values_of_roi = tile[grid]
-    return ECDF(flat_values_of_roi)
+    if len(flat_values_of_roi)>0:
+        return ECDF(flat_values_of_roi)
+    else:
+        return
