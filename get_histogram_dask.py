@@ -51,7 +51,7 @@ def get_histogram_dask(sys_arguments, parameters):
             if type(s) in (
                     omero.model.LabelI, omero.model.PolygonI):
                 if s.getTextValue():
-                    text_value = s.getTextValue().getValue()
+                    text_value = s.getTextValue().getValue().lower()
                     if text_value.find("hole_")!=-1:
                         hole_list.append([s])
                     if text_value.find("tissue_")!=-1:
@@ -184,4 +184,4 @@ def get_histogram_dask(sys_arguments, parameters):
         ECDF_all = np.sum(all_ecdfs * weighted_areas, 1) / np.sum(all_ecdfs * weighted_areas, 1).max()
 
         UploadArrayAsTxtToOmero(CDF_path + fname_upload, ECDF_all, group_name, imageId, pw, user)
-        return 0
+        return 1
