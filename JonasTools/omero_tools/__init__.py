@@ -6,7 +6,7 @@ import os
 
 import omero
 from omero.gateway import BlitzGateway
-
+import subprocess
 
 
 def refresh_omero_session(conn,user,pw,verbose=False):
@@ -63,31 +63,54 @@ def get_tile_coordinates(image, nx, ny, evaluated_crop_size, maximum_crop_size):
 
 
 def execute_command(command, verbose=False):
-    with os.popen(command) as stream:
-        output = stream.read()
-        if verbose:
-            print(output)
+    proc = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True
+    )
+    output = proc.stdout
+
+    if verbose:
+        os.system("echo \"%s\""%proc.stderr)
+        os.system("echo \"%s\""%proc.stdout)
     return output
 
 def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
-    np.savetxt(fname, array, delimiter=',', fmt='%f')
+    if not os.path.isfile(fname):
+        if type(array)!=type(None):
+            np.savetxt(fname, array, delimiter=',', fmt='%f')
+        else:
+            print("We could neither find the file in the system nor did you provide an array.")
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
-    login_command = "omero login " + user + "@134.76.18.202 -w " + pw + " -g \"" + group_name + "\""
-    execute_command(login_command)
-    command = "omero upload " + fname
-    output = execute_command(command)
-    command = "omero obj new FileAnnotation file=" + output
-    output = execute_command(command)
-    command = "omero obj new ImageAnnotationLink parent=" + "Image:" + str(imageId) + " child=" + output
+
+    os.system("echo \"Hello 2!\"")
+    login_command = '''module load anaconda3
+                    source activate /usr/users/jfranz/envs/cellpose_new
+                    omero login {user}@134.76.18.202 -w {pw} -g \"{groupname}\" '''.format(user=user, pw=pw, groupname=group_name)
+    execute_command(login_command, verbose).decode('UTF-8')
+    command = '''module load anaconda3
+                    source activate /usr/users/jfranz/envs/cellpose_new
+                    omero upload {fname} '''.format(fname=fname)
+    output = execute_command(command, verbose).decode('UTF-8')
+    command = '''module load anaconda3
+                    source activate /usr/users/jfranz/envs/cellpose_new
+                    omero obj new FileAnnotation file={fname} '''.format(fname=output)
+    os.system(("echo \"%s\""%fname))
+    output = execute_command(command,verbose).decode('UTF-8')
+    command = '''module load anaconda3
+                    source activate /usr/users/jfranz/envs/cellpose_new
+                    omero obj new ImageAnnotationLink parent=Image:{Image} child={output}'''.format(Image=imageId, output=output)
     return execute_command(command, verbose=verbose)
 
 
 def check_fname_omero(fname, image):
     already_extracted = False
     for ann in image.listAnnotations():
-        filename_ = ann.getFileName()
-        if filename_ == fname:
-            already_extracted = True
+        if (type(ann)==omero.gateway.FileAnnotationWrapper):
+            filename_ = ann.getFileName()
+            if filename_ == fname:
+                already_extracted = True
     return already_extracted
 
 

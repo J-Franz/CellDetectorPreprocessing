@@ -14,11 +14,11 @@ import dask.array as da
 
 ## Get credentials from first argumentma
 # run like main.py password
-from utils import extract_system_arguments, unpack_parameters, define_path
+from utils import extract_system_arguments, unpack_parameters
 
 
 def get_histogram_dask(sys_arguments, parameters):
-    c_dapi, c_fluorescence, imageId, local, pw, user = extract_system_arguments(sys_arguments)
+    c_dapi, c_fluorescence, imageId, base, gpu, pw, user = extract_system_arguments(sys_arguments)
     evaluated_crop_size, half_height, half_width, height, maximum_crop_size, overlap, width = unpack_parameters(
             parameters)
 
@@ -33,7 +33,7 @@ def get_histogram_dask(sys_arguments, parameters):
         size_c = image.getSizeC()
         max_c = size_c - 1  # counting starts from 0
         pixel_range = np.arange(image.getPixelRange()[1])
-
+        os.system("echo \"%s pixel range\""%pixel_range)
         roi_service = conn.getRoiService()
 
 
@@ -65,11 +65,13 @@ def get_histogram_dask(sys_arguments, parameters):
         c_dapi = 0
     if c_fluorescence is None:
         c_fluorescence = max_c
-
-    path = define_path(local)
+    # set working directory
+    zarr_path = "%sCelldetectorPreprocessed/Zarr/"%base
+    CDF_path = "%sCelldetectorPreprocessed/CDF/"%base
+    os.makedirs(CDF_path,exist_ok=True)
     fname = str(imageId) + "_image.zarr"
 
-    zarr_image = da.from_zarr(path+fname)
+    zarr_image = da.from_zarr(zarr_path+fname)
     # Set up plan to iterate over slide
     evaluated_crop_size = 2000#maximum_crop_size  # to load non_overlapping
 
@@ -81,7 +83,7 @@ def get_histogram_dask(sys_arguments, parameters):
             already_extracted = check_fname_omero(fname_upload, image)
 
             if already_extracted:
-                make_omero_file_available(image, fname_upload, path)
+                make_omero_file_available(image, fname_upload, CDF_path)
                 continue
         for hole in polygon_hole_list:
             ptissue=ptissue.difference(hole)
@@ -102,7 +104,7 @@ def get_histogram_dask(sys_arguments, parameters):
         os.system("echo \"We will start to crop the image in " + str(n_runs) + " tiles and start the analysis now.\"")
 
 
-        os.system("echo \"We will store the image in " + path + " tiles and start the analysis now.\"")
+        os.system("echo \"We will store the CDF in " + CDF_path + " tiles and start the analysis now.\"")
 
         list_all_cdfs = []
         list_analysed_area = []
@@ -121,8 +123,8 @@ def get_histogram_dask(sys_arguments, parameters):
                 crop_height = min(evaluated_crop_size, int(max_y - current_crop_y))
 
                 # display current crop for potential debugging
-                print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
-                      str(crop_width), str(crop_height), str(current_crop_x), str(current_crop_y))
+                #print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
+                #      str(crop_width), str(crop_height), str(current_crop_x), str(current_crop_y))
                 # load Dapi Channel and Fluorescence channel
                 # getTile switches width and height...
                 # this is compensated by get_coordinates to return switched coordinates
@@ -141,23 +143,36 @@ def get_histogram_dask(sys_arguments, parameters):
                     analyse_polygon = affinity.translate(analyse_polygon, -current_crop_x, -current_crop_y)
 
                     if analyse_polygon.geom_type=='MultiPolygon':
-                        for polygon in analyse_polygon:
-                            # save area of local polygon
-                            list_analysed_area.append(polygon.area)
-                            local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile)
-                            list_all_cdfs.append(local_ecdf)
+                        print(analyse_polygon)
+                        for polygon in analyse_polygon.geoms:
+                            print(analyse_polygon)
+                            try:
+                                # save area of local polygon
+                                list_analysed_area.append(polygon.area)
+                                #os.system("echo \"Polygon area = %d\""%polygon.area)
+                                local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile)
+                                #os.system("echo \"Polygon area = %s\""%local_ecdf(pixel_range)[::50])
+                                list_all_cdfs.append(local_ecdf)
+                            except ZeroDivisionError:
+                                continue
 
                     else:
 
-                        # save area of local polygon
-                        list_analysed_area.append(analyse_polygon.area)
-                        local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile)
-                        list_all_cdfs.append(local_ecdf)
+                        #os.system("echo \"Polygon area = %d\""%analyse_polygon.area)
+                        try:
+                            local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile)
+                            # save area of local polygon
+                            list_analysed_area.append(analyse_polygon.area)
+                            # os.system("echo \"Polygon area = %s\""%local_ecdf(pixel_range)[::50])
+                            list_all_cdfs.append(local_ecdf)
+                        except ZeroDivisionError:
+                            continue
+
 
 
                     stop_time = time.time()
                     report = "Processing of this tile took: %s" %(stop_time-start_time)
-                    os.system("echo \"%s\"" %report)
+                    #os.system("echo \"%s\"" %report)
                 n_run +=1
 
         all_ecdfs = np.ones((len(pixel_range),len(list_all_cdfs)))
@@ -168,5 +183,5 @@ def get_histogram_dask(sys_arguments, parameters):
 
         ECDF = np.sum(all_ecdfs * weighted_areas, 1) / np.sum(all_ecdfs * weighted_areas, 1).max()
 
-        UploadArrayAsTxtToOmero(path + fname_upload, ECDF, group_name, imageId, pw, user)
+        UploadArrayAsTxtToOmero(CDF_path + fname_upload, ECDF, group_name, imageId, pw, user)
         return 0
