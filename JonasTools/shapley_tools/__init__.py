@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from shapely import geometry
 from statsmodels.distributions.empirical_distribution import ECDF
@@ -20,7 +22,7 @@ def get_polygon_as_shape(list_):
             polygon_list_.append(None)
     return polygon_list_
 
-def analyse_polygon_histogram(polygon,tile):
+def analyse_polygon_histogram(polygon,tile, mc_sampling=False):
 
     # calculate boolean mask of encircled area of polygon
     polygon_path = np.vstack((polygon.exterior.xy[0], polygon.exterior.xy[1])).T
@@ -33,4 +35,12 @@ def analyse_polygon_histogram(polygon,tile):
     grid = polygon_path_matplot.contains_points(points)
     grid = grid.reshape(( crop_width,crop_height))
     # calculate ECDF of median filtered image within polygon (defined by boolean grid)
-    return ECDF(tile[grid])
+
+    if mc_sampling:
+        flat_values_of_roi = tile[grid][::10]
+    else:
+        flat_values_of_roi = tile[grid]
+    if len(flat_values_of_roi)>0:
+        return ECDF(flat_values_of_roi)
+    else:
+        return

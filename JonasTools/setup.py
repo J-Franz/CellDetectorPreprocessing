@@ -11,7 +11,7 @@ setuptools.setup(
     description="Little Toolbox",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/DegNeuron/Microglia/tree/master/JonasTools",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
