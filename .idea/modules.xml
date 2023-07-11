@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../CellDetectorPreprocessing/.idea/CellDetectorPreprocessing.iml" filepath="$PROJECT_DIR$/../CellDetectorPreprocessing/.idea/CellDetectorPreprocessing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../MicrogliaLabels/.idea/MicrogliaLabels.iml" filepath="$PROJECT_DIR$/../MicrogliaLabels/.idea/MicrogliaLabels.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/CellDetectorPreprocessing.iml" filepath="$PROJECT_DIR$/.idea/CellDetectorPreprocessing.iml" />
     </modules>
   </component>
 </project>

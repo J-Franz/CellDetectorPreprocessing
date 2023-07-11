@@ -61,12 +61,14 @@ if __name__ == '__main__':
 
     parameters = pack_parameters()
 
+    # only this function requires GPU support
     extraction = extract_cellpose_nucleiV2(sys_arguments, parameters)
     if extraction == 0:
         print("Cell pose coordinates already extracted.")
     elif extraction == 1:
         print("Cell pose coordinates are now extracted and saved to omero.")
 
+    # rewrite and better pull out zarr storage and histogram dask on CPU
     zarr_storage = save_omero_to_zarr(sys_arguments, parameters)
     if zarr_storage == 0:
         print("Zarr storage already initiated.")
