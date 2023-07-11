@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: JonasTools
+Version: 0.0.5
+Summary: Little Toolbox
+Home-page: UNKNOWN
+Author: Jonas
+Author-email: jonas.franz@med.uni-goettingen.com
+License: UNKNOWN
+Description: # Jonas Tools
+        
+        Let's start.
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown

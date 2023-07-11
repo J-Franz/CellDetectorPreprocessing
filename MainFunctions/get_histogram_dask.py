@@ -14,7 +14,7 @@ import dask.array as da
 
 ## Get credentials from first argumentma
 # run like main.py password
-from utils import extract_system_arguments, unpack_parameters
+from Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def get_histogram_dask(sys_arguments, parameters):

@@ -2,8 +2,8 @@
 from upload_only_cellpose import upload_cellpose_nucleiV2
 import sys
 # This is the actual application of cellpose
-from get_histogram_dask import get_histogram_dask
-from save_omero_to_zarr import save_omero_to_zarr
+from MainFunctions.get_histogram_dask import get_histogram_dask
+from MainFunctions.save_omero_to_zarr import save_omero_to_zarr
 
 
 def pack_system_arguments():

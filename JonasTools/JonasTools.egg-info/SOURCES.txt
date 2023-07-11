@@ -1,0 +1,8 @@
+README.md
+setup.py
+JonasTools.egg-info/PKG-INFO
+JonasTools.egg-info/SOURCES.txt
+JonasTools.egg-info/dependency_links.txt
+JonasTools.egg-info/top_level.txt
+omero_tools/__init__.py
+shapley_tools/__init__.py
