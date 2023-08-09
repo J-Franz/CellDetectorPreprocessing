@@ -7,8 +7,6 @@ from MainFunctions.save_omero_to_zarr import save_omero_to_zarr
 
 
 def pack_system_arguments():
-    ## Get credentials from first argumentma
-    # run like main.py password
     user = "Franz"
     pw = sys.argv[1]
     imageId = sys.argv[2]

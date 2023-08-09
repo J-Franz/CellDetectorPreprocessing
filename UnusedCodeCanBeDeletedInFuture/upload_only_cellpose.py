@@ -7,7 +7,7 @@ from Utils.utils import extract_system_arguments, unpack_parameters
 
 def upload_cellpose_nucleiV2(sys_arguments, parameters):
     ## Get credentials from first argumentma
-    # run like main.py password
+    # run like main_cellpose.py password
     c_dapi, c_fluorescence, imageId, base, gpu, pw, user = extract_system_arguments(sys_arguments)
 
     if gpu:

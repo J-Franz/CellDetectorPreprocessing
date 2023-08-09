@@ -10,8 +10,6 @@ from shapely import affinity
 from scipy.ndimage import median_filter
 from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
 
-## Get credentials from first argumentma
-# run like main.py password
 
 user = "Franz"
 pw = sys.argv[1]

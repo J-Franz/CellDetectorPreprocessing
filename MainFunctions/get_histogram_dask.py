@@ -12,8 +12,6 @@ from scipy.ndimage import median_filter
 from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
 import dask.array as da
 
-## Get credentials from first argumentma
-# run like main.py password
 from Utils.utils import extract_system_arguments, unpack_parameters
 
 
