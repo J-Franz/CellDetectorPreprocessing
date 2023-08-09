@@ -61,12 +61,6 @@ if __name__ == '__main__':
 
     parameters = pack_parameters()
 
-    # rewrite and better pull out zarr storage and histogram dask on CPU
-    zarr_storage = save_omero_to_zarr(sys_arguments, parameters)
-    if zarr_storage == 0:
-        print("Zarr storage already initiated.")
-    elif zarr_storage == 1:
-        print("Zarr storage is initiated now saved in this file system.")
 
     hist_calculation = get_histogram_dask(sys_arguments, parameters)
     print(hist_calculation)
