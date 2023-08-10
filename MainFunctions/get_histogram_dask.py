@@ -145,12 +145,15 @@ def get_histogram_dask(sys_arguments, parameters):
                         for polygon in analyse_polygon.geoms:
                             print(analyse_polygon)
                             try:
-                                # save area of local polygon
-                                list_analysed_area.append(polygon.area)
                                 #os.system("echo \"Polygon area = %d\""%polygon.area)
                                 local_ecdf = analyse_polygon_histogram(polygon,median_filtered_tile)
                                 #os.system("echo \"Polygon area = %s\""%local_ecdf(pixel_range)[::50])
-                                list_all_cdfs.append(local_ecdf)
+                                if local_ecdf is not None:
+                                    list_all_cdfs.append(local_ecdf)
+                                    # save area of local polygon
+                                    list_analysed_area.append(polygon.area)
+                                else:
+                                    print("We couldn't extract coordinates in %d x and %d y"%(current_crop_x,current_crop_y))
                             except ZeroDivisionError:
                                 continue
 
@@ -159,10 +162,14 @@ def get_histogram_dask(sys_arguments, parameters):
                         #os.system("echo \"Polygon area = %d\""%analyse_polygon.area)
                         try:
                             local_ecdf = analyse_polygon_histogram(analyse_polygon,median_filtered_tile)
-                            # save area of local polygon
-                            list_analysed_area.append(analyse_polygon.area)
-                            # os.system("echo \"Polygon area = %s\""%local_ecdf(pixel_range)[::50])
-                            list_all_cdfs.append(local_ecdf)
+
+                            if local_ecdf is not None:
+                                # save area of local polygon
+                                list_analysed_area.append(analyse_polygon.area)
+                                # os.system("echo \"Polygon area = %s\""%local_ecdf(pixel_range)[::50])
+                                list_all_cdfs.append(local_ecdf)
+                            else:
+                                print("We couldn't extract coordinates in %d x and %d y"%(current_crop_x,current_crop_y))
                         except ZeroDivisionError:
                             continue
 
@@ -174,6 +181,8 @@ def get_histogram_dask(sys_arguments, parameters):
                 n_run +=1
 
         all_ecdfs = np.ones((len(pixel_range),len(list_all_cdfs)))
+
+        # check why None sometimes in ecdf?
         for ecdf_id,ecdf in enumerate(list_all_cdfs):
             all_ecdfs[:,ecdf_id]= ecdf(pixel_range)
 
