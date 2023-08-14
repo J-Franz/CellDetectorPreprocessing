@@ -56,38 +56,68 @@ def save_omero_to_zarr(sys_arguments, parameters):
     verbose = False
     for nx in range(nx_tiles):  # [nx_tiles-1]:#
         for ny in range(ny_tiles):  # [ny_tiles-2]:#
-            if verbose:
-                print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
-                start_time = time.time()
-            # To avoid lost connection reconnect every time before downloading
-            with refresh_omero_session(None, user, pw) as conn:
-                image = get_image(conn, imageId)
-                pixels = get_pixels(conn, image)
-
-                # Define local crop area
-                tile_coordinates = get_tile_coordinates(image, nx, ny, evaluated_crop_size, maximum_crop_size)
-
-                # display current crop for potential debugging
-                if verbose:
-                    print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
-                      tile_coordinates)
-
-                # load Dapi Channel and Fluorescence channel
-                # getTile switches width and height...
-                # this is compensated by get_coordinates to return switched coordinates
-
-                current_crop_x = tile_coordinates["current_crop_x"]
-                current_crop_y = tile_coordinates["current_crop_y"]
-                current_crop_x_plus_width = current_crop_x + tile_coordinates["crop_width"]
-                current_crop_y_plus_width = current_crop_y + tile_coordinates["crop_height"]
-                for c in range(size_c):
-                    conn.c.enableKeepAlive(60)
-                    # Transpose as getTile returns Y,X to get X,Y
-                    tile_ = pixels.getTile(0, theC=c, theT=0, tile=tile_coordinates.values()).T
-                    z1[current_crop_x:current_crop_x_plus_width,
-                        current_crop_y:current_crop_y_plus_width, c] = tile_
-            if verbose:
-                stop_time = time.time()
-                report = "Processing of this tile took: %s" % (stop_time - start_time)
-                os.system("echo \"%s\"" % report)
+            process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_tiles, pw, size_c, user, verbose,
+                         z1)
     return 1
+
+
+def process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_tiles, pw, size_c, user, verbose, z1):
+    """
+    Process a single tile of an image.
+
+    Args:
+        evaluated_crop_size (int): The evaluated crop size.
+        imageId (int): The ID of the image to process.
+        maximum_crop_size (int): The maximum crop size.
+        nx (int): The current x index of the tile.
+        ny (int): The current y index of the tile.
+        ny_tiles (int): The total number of y tiles.
+        pw (str): The password for the OMERO connection.
+        size_c (int): The number of channels.
+        user (str): The user name for the OMERO connection.
+        verbose (bool): Whether to print verbose output.
+        z1 (numpy.ndarray): The array to store the processed tile.
+
+    Returns:
+        None: This function updates the z1 array in place.
+
+    Note:
+        This function retrieves and processes a specific tile from an OMERO image.
+        It establishes a connection, fetches the required image and pixel data,
+        defines a local crop area, loads channel data, and populates the z1 array
+        with the processed tile data. Timing information is printed if verbose is True.
+    """
+    if verbose:
+        print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
+        start_time = time.time()
+    # To avoid lost connection reconnect every time before downloading
+    with refresh_omero_session(None, user, pw) as conn:
+        image = get_image(conn, imageId)
+        pixels = get_pixels(conn, image)
+
+        # Define local crop area
+        tile_coordinates = get_tile_coordinates(image, nx, ny, evaluated_crop_size, maximum_crop_size)
+
+        # display current crop for potential debugging
+        if verbose:
+            print("The current crop is crop_width,crop_height,current_crop_x,current_crop_y:",
+                  tile_coordinates)
+
+        # load Dapi Channel and Fluorescence channel
+        # getTile switches width and height...
+        # this is compensated by get_coordinates to return switched coordinates
+
+        current_crop_x = tile_coordinates["current_crop_x"]
+        current_crop_y = tile_coordinates["current_crop_y"]
+        current_crop_x_plus_width = current_crop_x + tile_coordinates["crop_width"]
+        current_crop_y_plus_width = current_crop_y + tile_coordinates["crop_height"]
+        for c in range(size_c):
+            conn.c.enableKeepAlive(60)
+            # Transpose as getTile returns Y,X to get X,Y
+            tile_ = pixels.getTile(0, theC=c, theT=0, tile=tile_coordinates.values()).T
+            z1[current_crop_x:current_crop_x_plus_width,
+            current_crop_y:current_crop_y_plus_width, c] = tile_
+    if verbose:
+        stop_time = time.time()
+        report = "Processing of this tile took: %s" % (stop_time - start_time)
+        os.system("echo \"%s\"" % report)
