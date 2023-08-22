@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="correction of COPY" />
+    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="updated workspace">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +16,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>
@@ -34,6 +37,9 @@
         <option name="url" value="https://github.com/J-Franz/CellDetectorPreprocessing.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "customColor": "",
@@ -77,7 +83,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692692949373</updated>
-      <workItem from="1692692950704" duration="4211000" />
+      <workItem from="1692692950704" duration="4900000" />
     </task>
     <task id="LOCAL-00001" summary="Created .dockerignore directory and relocated JonasTools and old Code directories there">
       <option name="closed" value="true" />
@@ -127,7 +133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692697460905</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="updated workspace">
+      <option name="closed" value="true" />
+      <created>1692698039558</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692698039558</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,6 +165,7 @@
     <MESSAGE value="Dockerfile changed CMD to main_cellpose.py" />
     <MESSAGE value="Added COPY ./project/ and marked CMD as comment" />
     <MESSAGE value="correction of COPY" />
-    <option name="LAST_COMMIT_MESSAGE" value="correction of COPY" />
+    <MESSAGE value="updated workspace" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated workspace" />
   </component>
 </project>

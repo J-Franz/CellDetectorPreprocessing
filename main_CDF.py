@@ -1,9 +1,9 @@
 # This is to connect to omero
-from Dockerfile_build.MainFunctions.extract_cellpose_nucleiV2 import extract_cellpose_nucleiV2
+from MainFunctions.extract_cellpose_nucleiV2 import extract_cellpose_nucleiV2
 import sys
 # This is the actual application of cellpose
-from Dockerfile_build.MainFunctions.get_histogram_dask import get_histogram_dask
-from Dockerfile_build.MainFunctions.save_omero_to_zarr import save_omero_to_zarr
+from MainFunctions.get_histogram_dask import get_histogram_dask
+from MainFunctions.save_omero_to_zarr import save_omero_to_zarr
 
 
 def pack_system_arguments():

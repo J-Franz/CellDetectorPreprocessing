@@ -4,10 +4,10 @@ import time
 import numpy as np
 from scipy.stats import skew
 
-from Dockerfile_build.Utils.image_tools import get_coordinates, delete_cells_at_border
+from Utils.image_tools import get_coordinates, delete_cells_at_border
 from JonasTools.omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates, UploadArrayAsTxtToOmero, \
     check_fname_omero, make_omero_file_available
-from Dockerfile_build.Utils.utils import extract_system_arguments, unpack_parameters
+from Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def extract_cellpose_nucleiV2(sys_arguments, parameters):
