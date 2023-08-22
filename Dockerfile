@@ -36,7 +36,7 @@ RUN conda install dask
 
 RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
 
-#COPY . /project/
+COPY . /Code/
 
 
 
