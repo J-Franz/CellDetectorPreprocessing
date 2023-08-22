@@ -17,10 +17,9 @@ SHELL ["/bin/bash","--login","-c"]
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.5.2-0-Linux-x86_64.sh
 RUN chmod 755 Miniconda3-py38_23.5.2-0-Linux-x86_64.sh
 RUN ./Miniconda3-py38_23.5.2-0-Linux-x86_64.sh -b
-RUN source /root/miniconda3/etc/profile.d/conda.sh
+#RUN source /root/miniconda3/etc/profile.d/conda.sh
 
 #Install Omero
-COPY environment.yml .
 RUN /root/miniconda3/bin/conda create -y -n cellpose -c ome python=3.8 zeroc-ice36-python omero-py pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch-nightly  -c nvidia
 
 #set Shell to use new environment
@@ -37,11 +36,11 @@ RUN conda install dask
 
 RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
 
+#COPY ./project/
 
 
 
-#Run test python script in the environment
-COPY SimpleConnector.py ./
+
 #ENTRYPOINT can be used instead of CMD in case the parameters given with docker run should not override CMD 
-CMD ["/root/miniconda3/bin/conda", "run","--no-capture-output", "-n", "cellpose", "main_cellpose.py", "ome", "253891", "/PATHMODIFY", "False", "1"]
+#CMD ["/root/miniconda3/bin/conda", "run","--no-capture-output", "-n", "cellpose", "main_cellpose.py", "ome", "253891", "/PATHMODIFY", "False", "1"]
 #CMD["/root/miniconda3/bin/conda","run","--no-capture-output","-n","cellpose"]
