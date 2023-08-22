@@ -12,7 +12,7 @@ from scipy.ndimage import median_filter
 from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
 import dask.array as da
 
-from Utils.utils import extract_system_arguments, unpack_parameters
+from Dockerfile_build.Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def get_histogram_dask(sys_arguments, parameters):
