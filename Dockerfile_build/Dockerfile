@@ -43,5 +43,5 @@ RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
 #Run test python script in the environment
 COPY SimpleConnector.py ./
 #ENTRYPOINT can be used instead of CMD in case the parameters given with docker run should not override CMD 
-CMD ["/root/miniconda3/bin/conda", "run","--no-capture-output", "-n", "cellpose"]
+CMD ["/root/miniconda3/bin/conda", "run","--no-capture-output", "-n", "cellpose", "main_cellpose.py", "ome", "253891", "/PATHMODIFY", "False", "1"]
 #CMD["/root/miniconda3/bin/conda","run","--no-capture-output","-n","cellpose"]
