@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="Undo directory changes bc not needed">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AlignmentCodeForMouseAtlas/main_nii.py" beforeDir="false" afterPath="$PROJECT_DIR$/AlignmentCodeForMouseAtlas/main_nii.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainFunctions/extract_cellpose_nucleiV2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/MainFunctions/extract_cellpose_nucleiV2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainFunctions/get_histogram_dask.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/MainFunctions/get_histogram_dask.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainFunctions/save_omero_to_zarr.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/MainFunctions/save_omero_to_zarr.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/main_upload_only_cellpose.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/main_upload_only_cellpose.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_CDF.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/main_CDF.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_cellpose.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/main_cellpose.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_zarr.py" beforeDir="false" afterPath="$PROJECT_DIR$/Docker_Code/main_zarr.py" afterDir="false" />
+    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="Created new dir Code adn relocated files needed fpr docker build">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,11 +70,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Code" />
       <recent name="$PROJECT_DIR$/Docker_Code" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/../" />
       <recent name="$PROJECT_DIR$/Dockerfile_build" />
-      <recent name="$PROJECT_DIR$/.dockerignore" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -93,7 +85,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1692692949373</updated>
-      <workItem from="1692692950704" duration="6907000" />
+      <workItem from="1692692950704" duration="7267000" />
     </task>
     <task id="LOCAL-00001" summary="Created .dockerignore directory and relocated JonasTools and old Code directories there">
       <option name="closed" value="true" />
@@ -159,7 +151,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692698564213</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Created new dir Code adn relocated files needed fpr docker build">
+      <option name="closed" value="true" />
+      <created>1692701715518</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1692701715518</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +185,7 @@
     <MESSAGE value="correction of COPY" />
     <MESSAGE value="updated workspace" />
     <MESSAGE value="Undo directory changes bc not needed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Undo directory changes bc not needed" />
+    <MESSAGE value="Created new dir Code adn relocated files needed fpr docker build" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created new dir Code adn relocated files needed fpr docker build" />
   </component>
 </project>
