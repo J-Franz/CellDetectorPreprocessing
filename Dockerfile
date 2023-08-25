@@ -35,14 +35,14 @@ RUN echo "conda activate cellpose" >> ~/.profile
 #set Shell to use new environment
 #SHELL ["/root/miniconda3/bin/conda", "run", "--no-capture-output","-n", "cellpose", "/bin/bash", "-c"]
 
-RUN python -m pip install cellpose && \
-        python -m pip install cellpose --upgrade && \
-        conda install scikit-image && \
-        pip install shapely && \
-        conda install -c conda-forge statsmodels && \
-        conda install -c conda-forge matplotlib && \
-        conda install zarr && \
-        conda install dask
+RUN python -m pip install cellpose
+RUN python -m pip install cellpose --upgrade
+RUN conda install scikit-image
+RUN pip install shapely
+RUN conda install -c conda-forge statsmodels
+RUN conda install -c conda-forge matplotlib
+RUN conda install zarr
+RUN conda install dask
 
 RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
 
