@@ -1,8 +1,8 @@
 # This is to connect to omero
 import sys
 # This is the actual application of cellpose
-from MainFunctions.get_histogram_dask import get_histogram_dask
-from MainFunctions.save_omero_to_zarr import save_omero_to_zarr
+from Code.MainFunctions.get_histogram_dask import get_histogram_dask
+from Code.MainFunctions.save_omero_to_zarr import save_omero_to_zarr
 from save_channel_to_nib_file import save_channel_to_nib_file
 
 
