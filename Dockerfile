@@ -49,7 +49,7 @@ RUN echo "conda activate cellpose" >> ~/.profile
 
 
 
-COPY . /Code/
+COPY . .
 
 
 
