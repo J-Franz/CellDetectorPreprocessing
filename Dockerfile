@@ -29,12 +29,7 @@ RUN conda init bash
 #Install Omero
 # /root/miniconda3/bin/conda
 RUN conda create -y -n cellpose -c ome python=3.8 zeroc-ice36-python omero-py pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch-nightly  -c nvidia
-#adding conda activate to profile to keep it active
-RUN echo "conda activate cellpose" >> ~/.profile
-
-#set Shell to use new environment
-#SHELL ["/root/miniconda3/bin/conda", "run", "--no-capture-output","-n", "cellpose", "/bin/bash", "-c"]
-
+# install commands need to be positioned between create and activate to show up in active container at runtime
 RUN python -m pip install cellpose
 RUN python -m pip install cellpose --upgrade
 RUN conda install scikit-image
@@ -43,8 +38,15 @@ RUN conda install -c conda-forge statsmodels
 RUN conda install -c conda-forge matplotlib
 RUN conda install zarr
 RUN conda install dask
-
 RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
+
+#adding conda activate to profile to keep it active
+RUN echo "conda activate cellpose" >> ~/.profile
+
+#set Shell to use new environment
+#SHELL ["/root/miniconda3/bin/conda", "run", "--no-capture-output","-n", "cellpose", "/bin/bash", "-c"]
+
+
 
 
 COPY . /Code/
