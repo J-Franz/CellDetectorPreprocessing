@@ -1,4 +1,5 @@
-FROM nvidia/cuda:12.0.1-cudnn8-runtime-ubuntu20.04
+FROM    ubuntu:20.04
+#nvidia/cuda:12.0.1-cudnn8-runtime-ubuntu20.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.8-dev \
@@ -30,21 +31,31 @@ RUN conda init bash
 # /root/miniconda3/bin/conda
 RUN conda create -y -n cellpose -c ome python=3.8 zeroc-ice36-python omero-py pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch-nightly  -c nvidia
 # install commands need to be positioned between create and activate to show up in active container at runtime
-RUN python -m pip install cellpose
-RUN python -m pip install cellpose --upgrade
-RUN conda install scikit-image
-RUN pip install shapely
-RUN conda install -c conda-forge statsmodels
-RUN conda install -c conda-forge matplotlib
-RUN conda install zarr
-RUN conda install dask
-RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
 
-#adding conda activate to profile to keep it active
+# moved here to conda activate to install in the following packages to the virtual environment
+#adding conda activate to profile to keep it active when bash --login
 RUN echo "conda activate cellpose" >> ~/.profile
 
 #set Shell to use new environment
+
+# this needs to be called before the run conda install and run python -m pip install commands
+SHELL ["/bin/bash", "--login", "-c"]
+
+## I would prefer the login method, what do you think? seems more robust
 #SHELL ["/root/miniconda3/bin/conda", "run", "--no-capture-output","-n", "cellpose", "/bin/bash", "-c"]
+
+
+
+
+
+RUN python -m pip install cellpose
+RUN python -m pip install cellpose --upgrade
+RUN conda install scikit-image zarr dask matplotlib statsmodels -c conda-forge
+RUN pip install shapely
+RUN python -m pip install -i  https://test.pypi.org/simple/ JonasTools
+
+
+#RUN echo "conda activate cellpose" >> ~/.profile
 
 
 
