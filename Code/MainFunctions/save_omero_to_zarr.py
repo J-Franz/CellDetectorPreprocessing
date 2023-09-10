@@ -3,8 +3,8 @@ import time
 import zarr
 import numpy as np
 
-from JonasTools.omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates
-from Code.Utils.utils import extract_system_arguments, unpack_parameters
+from omero_tools import refresh_omero_session, get_image, get_pixels, get_tile_coordinates
+from Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def save_omero_to_zarr(sys_arguments, parameters):
