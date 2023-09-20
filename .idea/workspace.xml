@@ -4,8 +4,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="Created new dir Code adn relocated files needed fpr docker build">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools.">
+      <change afterPath="$PROJECT_DIR$/Code/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AlignmentCodeForMouseAtlas/save_channel_to_nib_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/AlignmentCodeForMouseAtlas/save_channel_to_nib_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/MainFunctions/extract_cellpose_nucleiV2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/MainFunctions/extract_cellpose_nucleiV2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/MainFunctions/get_histogram_dask.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/MainFunctions/get_histogram_dask.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/MainFunctions/save_omero_to_zarr.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/MainFunctions/save_omero_to_zarr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/Utils/image_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/Utils/image_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/JonasTools.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/JonasTools.egg-info/PKG-INFO" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/JonasTools.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/JonasTools.egg-info/SOURCES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/JonasTools.egg-info/dependency_links.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/JonasTools.egg-info/dependency_links.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/JonasTools.egg-info/top_level.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/JonasTools.egg-info/top_level.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/build/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/build/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/build/lib/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/build/lib/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/build/lib/omero_tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/build/lib/omero_tools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/build/lib/shapley_tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/build/lib/shapley_tools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.1-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.1-py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.1-py3.7.egg" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.1-py3.7.egg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.1.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.1.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.2-py2.py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.2-py2.py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.2.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.2.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.3-py2.py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.3-py2.py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.3.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.3.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.4-py2.py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.4-py2.py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.4.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.4.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.5-py2.py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.5-py2.py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/dist/JonasTools-0.0.5.tar.gz" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/dist/JonasTools-0.0.5.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/omero_tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/omero_tools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JonasTools/shapley_tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/JonasTools/shapley_tools/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OldCodeForDebugging/GetCompleteSnippets.py" beforeDir="false" afterPath="$PROJECT_DIR$/OldCodeForDebugging/GetCompleteSnippets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OldCodeForDebugging/GetCompleteTrainingData.py" beforeDir="false" afterPath="$PROJECT_DIR$/OldCodeForDebugging/GetCompleteTrainingData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/get_histogram.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/get_histogram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/upload_only_cellpose.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnusedCodeCanBeDeletedInFuture/upload_only_cellpose.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +51,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Dockerfile" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -24,12 +60,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Sarah-We"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Sarah-We&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -41,30 +77,32 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": -1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2UKey1VMZDTOififWPl5LveHCBD" />
+  <component name="ProjectLevelVcsManager">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/installateur/PycharmProjects/CellDetectorPreprocessing",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/installateur/PycharmProjects/CellDetectorPreprocessing&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -159,7 +197,39 @@
       <option name="project" value="LOCAL" />
       <updated>1692701715518</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="problems with my /ideas/workspace file. Lets see if adding workspace.xml explicitly helps.">
+      <option name="closed" value="true" />
+      <created>1693259564110</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1693259564110</updated>
+    </task>
+    <task id="LOCAL-00011" summary="modified dockerfile to correctly install in conda cellpose environment.">
+      <option name="closed" value="true" />
+      <created>1694285461694</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1694285461695</updated>
+    </task>
+    <task id="LOCAL-00012" summary="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools.">
+      <option name="closed" value="true" />
+      <created>1694368213470</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1694368213470</updated>
+    </task>
+    <task id="LOCAL-00013" summary="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools.">
+      <option name="closed" value="true" />
+      <created>1694368341763</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1694368341763</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,6 +256,9 @@
     <MESSAGE value="updated workspace" />
     <MESSAGE value="Undo directory changes bc not needed" />
     <MESSAGE value="Created new dir Code adn relocated files needed fpr docker build" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created new dir Code adn relocated files needed fpr docker build" />
+    <MESSAGE value="problems with my /ideas/workspace file. Lets see if adding workspace.xml explicitly helps." />
+    <MESSAGE value="modified dockerfile to correctly install in conda cellpose environment." />
+    <MESSAGE value="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools." />
+    <option name="LAST_COMMIT_MESSAGE" value="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools." />
   </component>
 </project>

@@ -1,7 +1,7 @@
 import os
 import zarr
 import dask.array as da
-from JonasTools.omero_tools import refresh_omero_session, get_image
+from Code.JonasTools import refresh_omero_session, get_image
 from Code.Utils.utils import extract_system_arguments, unpack_parameters
 import numpy as np
 import nibabel as nib

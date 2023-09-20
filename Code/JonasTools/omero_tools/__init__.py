@@ -17,19 +17,25 @@ def refresh_omero_session(conn,user,pw,verbose=False):
         PORT=   4064
         if verbose:
             print("Connected.")
-        conn = BlitzGateway(USERNAME, PASSWORD,host=HOST, port=PORT)
+        c = omero.client(host=HOST, port=4064, args=[
+            '--IceSSL.Ciphers=HIGH'])
+        session = c.createSession(USERNAME, PASSWORD,  )
+        conn = BlitzGateway(client_obj=c)
     else:
         
         USERNAME = user
         PASSWORD = pw
-        HOST = "134.76.18.202"
+        HOST = "wss://134.76.18.202"
         PORT=   4064
 
         conn.connect()
         if verbose:
             print("Connected.")
-        conn = BlitzGateway(USERNAME, PASSWORD,host=HOST, port=PORT)
-    conn.connect()
+        c = omero.client(host=HOST, port=4064, args=[
+            '--IceSSL.Ciphers=HIGH'])
+        session = c.createSession(USERNAME, PASSWORD)
+
+        conn = BlitzGateway(client_obj=c)
     if verbose:
         print(conn.isConnected())
     return conn

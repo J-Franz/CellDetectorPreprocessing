@@ -2,13 +2,13 @@ import sys
 import os
 import time
 ## This is to connect to omero
-from JonasTools.omero_tools import refresh_omero_session
+from Code.JonasTools import refresh_omero_session
 import numpy as np
 import omero
 from shapely import geometry
 from shapely import affinity
 from scipy.ndimage import median_filter
-from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
+from Code.JonasTools import analyse_polygon_histogram,get_polygon_as_shape
 
 
 user = "Franz"

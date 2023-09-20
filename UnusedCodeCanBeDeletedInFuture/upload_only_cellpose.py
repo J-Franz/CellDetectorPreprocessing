@@ -1,6 +1,6 @@
 import os
 
-from JonasTools.omero_tools import refresh_omero_session, get_image, UploadArrayAsTxtToOmero, \
+from Code.JonasTools import refresh_omero_session, get_image, UploadArrayAsTxtToOmero, \
     check_fname_omero, make_omero_file_available
 from Code.Utils.utils import extract_system_arguments, unpack_parameters
 

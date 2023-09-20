@@ -2,14 +2,15 @@ import sys
 import os
 import time
 ## This is to connect to omero
-from omero_tools import refresh_omero_session, get_image, UploadArrayAsTxtToOmero, check_fname_omero, \
+from JonasTools.omero_tools import refresh_omero_session, get_image, UploadArrayAsTxtToOmero, check_fname_omero, \
     make_omero_file_available
+from JonasTools.shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
+
 import numpy as np
 import omero
 from shapely import geometry
 from shapely import affinity
 from scipy.ndimage import median_filter
-from shapley_tools import analyse_polygon_histogram,get_polygon_as_shape
 import dask.array as da
 
 from Utils.utils import extract_system_arguments, unpack_parameters
