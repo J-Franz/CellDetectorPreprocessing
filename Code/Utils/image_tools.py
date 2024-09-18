@@ -11,7 +11,7 @@ def get_coordinates(tile, plot=False, gpu=False):
     log_tile[np.isinf(log_tile)] = 10 ** -16
     # DEFINE CELLPOSE MODEL
     # model_type='cyto' or model_type='nuclei'
-    cellpose = cellpose_models.Cellpose(gpu=gpu, model_type='nuclei', net_avg=False)
+    cellpose = cellpose_models.Cellpose(gpu=gpu, model_type='nuclei')
 
     # define CHANNELS to run segementation on
     # grayscale=0, R=1, G=2, B=3

@@ -36,7 +36,7 @@ def pack_system_arguments():
 
 def pack_parameters():
     # define parameters:
-    maximum_crop_size = 1000
+    maximum_crop_size = 10000
     overlap = 100
     evaluated_crop_size = maximum_crop_size - overlap
     width = 101
