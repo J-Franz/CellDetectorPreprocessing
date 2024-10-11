@@ -97,6 +97,7 @@ def execute_command(command, verbose=False):
         print(f"Output: {e.output}")
         print(f"Error: {e.stderr}")
         raise  # Re-raise the exception after logging
+
 def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
@@ -107,7 +108,62 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
     command = "omero obj new FileAnnotation file=" + output
     output = execute_command(command)
     command = "omero obj new ImageAnnotationLink parent=" + "Image:" + str(imageId) + " child=" + output
-    return execute_command(command, verbose=verbose)
+    try:
+        execute_command(command, verbose=verbose)
+    except:
+        try:
+            UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
+        except:
+            print("Command line upload and Python API Upload failed")
+
+    return True
+
+import omero.gateway
+import numpy as np
+
+
+def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
+    # Save the array to a text file
+    np.savetxt(fname, array, delimiter=',', fmt='%f')
+
+    # Connect to OMERO
+    client = omero.gateway.BlitzGateway(user, pw, host='134.76.18.202', secure=True)
+    client.connect()
+
+    if not client.isConnected():
+        raise Exception("Failed to connect to OMERO server")
+
+    # Switch to the specified group
+    client.setGroup(client.getAdminService().getEventContext().getGroup())
+
+    # Upload the file
+    if verbose:
+        print("Uploading file...")
+    upload_store = client.uploadFile(fname)
+
+    # Create a FileAnnotation
+    if verbose:
+        print("Creating FileAnnotation...")
+    fa = omero.gateway.FileAnnotationWrapper(client)
+    fa.setFile(upload_store)
+    fa.save()
+
+    # Link the annotation to the image
+    if verbose:
+        print("Linking annotation to image...")
+    image = client.getObject("Image", imageId)
+    image.linkAnnotation(fa)
+
+    # Optionally, you can also add annotations to the image
+    client.getSession().save(image)
+
+    client.close()
+
+    if verbose:
+        print(f"Upload and linking successful. FileAnnotation ID: {fa.getId()}")
+
+    return fa.getId()
+
 
 
 def check_fname_omero(fname, image):
