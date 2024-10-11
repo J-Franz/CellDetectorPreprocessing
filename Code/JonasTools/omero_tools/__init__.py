@@ -98,7 +98,7 @@ def execute_command(command, verbose=False):
         print(f"Error: {e.stderr}")
         raise  # Re-raise the exception after logging
 
-def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
+def UploadArrayAsTxtToOmero_old(fname, array, group_name, imageId, pw, user, verbose=True):
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
     login_command = "omero login " + user + "@134.76.18.202 -w " + pw + " -g \"" + group_name + "\""
@@ -128,7 +128,7 @@ import omero.gateway
 import numpy as np
 
 
-def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
+def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
     # Save the array to a text file
     np.savetxt(fname, array, delimiter=',', fmt='%f')
 
