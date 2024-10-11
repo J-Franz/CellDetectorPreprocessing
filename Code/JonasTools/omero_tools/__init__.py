@@ -102,8 +102,14 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
     login_command = "omero login " + user + "@134.76.18.202 -w " + pw + " -g \"" + group_name + "\""
-    execute_command(login_command)
-    command = "omero upload " + fname
+    try:
+        execute_command(login_command, verbose=verbose)
+    except:
+        try:
+            UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
+            return False
+        except:
+            print("Command line upload and Python API Upload failed")    command = "omero upload " + fname
     output = execute_command(command)
     command = "omero obj new FileAnnotation file=" + output
     output = execute_command(command)
