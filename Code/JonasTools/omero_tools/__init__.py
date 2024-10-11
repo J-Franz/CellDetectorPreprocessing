@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import subprocess
 
 import numpy as np
 
@@ -17,7 +18,7 @@ def refresh_omero_session(conn,user,pw,verbose=False):
         PORT=   4064
         if verbose:
             print("Connected.")
-        c = omero.client(host=HOST, port=4064, args=[
+        c = omero.client(host=HOST, port=PORT, args=[
             '--IceSSL.Ciphers=HIGH'])
         session = c.createSession(USERNAME, PASSWORD,  )
         conn = BlitzGateway(client_obj=c)
@@ -31,7 +32,7 @@ def refresh_omero_session(conn,user,pw,verbose=False):
         conn.connect()
         if verbose:
             print("Connected.")
-        c = omero.client(host=HOST, port=4064, args=[
+        c = omero.client(host=HOST, port=PORT, args=[
             '--IceSSL.Ciphers=HIGH'])
         session = c.createSession(USERNAME, PASSWORD)
 
@@ -68,13 +69,34 @@ def get_tile_coordinates(image, nx, ny, evaluated_crop_size, maximum_crop_size):
                        crop_height=crop_height)
 
 
-def execute_command(command, verbose=False):
-    with os.popen(command) as stream:
-        output = stream.read()
-        if verbose:
-            print(output)
-    return output
 
+
+def execute_command(command, verbose=False):
+    try:
+        # Execute the command
+        result = subprocess.run(
+            command,
+            shell=True,  # Run the command through the shell
+            check=True,  # Raise an exception if the command fails
+            stdout=subprocess.PIPE,  # Capture standard output
+            stderr=subprocess.PIPE,  # Capture standard error
+            text=True  # Decode output as text
+        )
+
+        # If verbose, print the output and errors
+        if verbose:
+            print(result.stdout)
+            if result.stderr:
+                print("Error Output:", result.stderr)
+
+        return result.stdout.strip()
+
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the command: {command}")
+        print(f"Return Code: {e.returncode}")
+        print(f"Output: {e.output}")
+        print(f"Error: {e.stderr}")
+        raise  # Re-raise the exception after logging
 def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
