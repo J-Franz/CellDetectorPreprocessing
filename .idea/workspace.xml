@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="fixed the login to the omero server by adding high standards like in the SimpleConnector ('--IceSSL.Ciphers=HIGH')&#10;&#10;This requires updates of JonasTools. Instead of compiling the pip tools again I reimplemented the local import from the JonasTools instead and refactored the code. To demonstrate how this can be executed with the docker image i added a docker_scripts folder.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="84714fac-97ce-4de7-acb6-99d6d23b7a15" name="Changes" comment="Adopted Cellpose to newer version where net_average is not calculated any more.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/Utils/image_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/Utils/image_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/main_cellpose.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/main_cellpose.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,14 +30,12 @@
     &quot;assignee&quot;: &quot;Sarah-We&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="595ce147-ca13-410c-b74c-24b35679f407" />
-        <option name="url" value="https://github.com/J-Franz/CellDetectorPreprocessing.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/J-Franz/CellDetectorPreprocessing.git",
+    "accountId": "d80d19b8-f06b-4e28-9ada-9c2b6138087e"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Code/MainFunctions/extract_cellpose_nucleiV2.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -88,7 +83,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
+        <option value="bundled-python-sdk-884f5ed5d46b-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.22855.92" />
       </set>
     </attachedChunks>
   </component>
@@ -214,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695222754411</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Adopted Cellpose to newer version where net_average is not calculated any more.">
+      <option name="closed" value="true" />
+      <created>1726671558682</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1726671558682</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,7 +248,8 @@
     <MESSAGE value="modified dockerfile to correctly install in conda cellpose environment." />
     <MESSAGE value="updated how omero_tools fom JonasTools imported. To get it directly from the pip install it does not require JonasTools.omero_tools but only omero_tools. Otherwise it looks for the available JonasTools directory which is not necessary with pip JonasTools." />
     <MESSAGE value="fixed the login to the omero server by adding high standards like in the SimpleConnector ('--IceSSL.Ciphers=HIGH')&#10;&#10;This requires updates of JonasTools. Instead of compiling the pip tools again I reimplemented the local import from the JonasTools instead and refactored the code. To demonstrate how this can be executed with the docker image i added a docker_scripts folder." />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed the login to the omero server by adding high standards like in the SimpleConnector ('--IceSSL.Ciphers=HIGH')&#10;&#10;This requires updates of JonasTools. Instead of compiling the pip tools again I reimplemented the local import from the JonasTools instead and refactored the code. To demonstrate how this can be executed with the docker image i added a docker_scripts folder." />
+    <MESSAGE value="Adopted Cellpose to newer version where net_average is not calculated any more." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adopted Cellpose to newer version where net_average is not calculated any more." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
