@@ -106,10 +106,11 @@ def UploadArrayAsTxtToOmero_old(fname, array, group_name, imageId, pw, user, ver
         execute_command(login_command, verbose=verbose)
     except:
         try:
-            UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
+            UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True)
             return False
         except:
-            print("Command line upload and Python API Upload failed")    command = "omero upload " + fname
+            print("Command line upload and Python API Upload failed")
+    command = "omero upload " + fname
     output = execute_command(command)
     command = "omero obj new FileAnnotation file=" + output
     output = execute_command(command)
