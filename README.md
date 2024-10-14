@@ -9,7 +9,8 @@ This repository provides preprocessing functions essential for performing cell c
 The core of the CellDetector algorithm is nuclei detection, which can be performed using any suitable algorithm. Currently only the **Cellpose** algorithm is supported. The program performs nuclei detection on the whole slide scan and uploads a list of detected nuclei to the OMERO server and links the list to the processed image.
 
 An exemplary notebook to test the nuclei detection can be found in CoLabs:
-<html><a href=\"https://colab.research.google.com/github/J-Franz/CellDetectorPreprocessing/blob/master/CellDetectorPreprocessing_Colabs.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a></html>
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/J-Franz/CellDetectorPreprocessing/blob/master/CellDetectorPreprocessing_Colabs.ipynb)
+
 
 #### Prepare Lazy Loading Locally
 To enable lazy loading of images (e.g., using Dask), the program stores a local copy of the images as a Zarr array. This approach facilitates efficient data handling and processing during training and prediction of the CellDetector algorithm.
