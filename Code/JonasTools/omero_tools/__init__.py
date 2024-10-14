@@ -119,6 +119,7 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
         execute_command(command, verbose=verbose)
     except:
         try:
+            print("Command line upload failed.")
             # TODO eventually replace
             #UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
         except:
@@ -130,7 +131,7 @@ import omero.gateway
 import numpy as np
 
 
-def '''UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
+'''def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
     # Save the array to a text file
     np.savetxt(fname, array, delimiter=',', fmt='%f')
 
