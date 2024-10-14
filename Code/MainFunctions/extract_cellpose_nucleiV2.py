@@ -92,7 +92,6 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
 
             # Apply cellpose to extract coordinates, potentially one could also save masks and boundaries
             [list_nuclei_x_coords, list_nuclei_y_coords] = get_coordinates(tile_dapi, plot_cellpose, use_gpu)
-            plt.imshow((tile_dapi))
             # cast list to numpy
             x_coords_nuclei = np.array(list_nuclei_x_coords)
             y_coords_nuclei = np.array(list_nuclei_y_coords)
