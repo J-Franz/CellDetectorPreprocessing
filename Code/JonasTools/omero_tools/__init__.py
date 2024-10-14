@@ -119,7 +119,8 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
         execute_command(command, verbose=verbose)
     except:
         try:
-            UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
+            # TODO eventually replace
+            #UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True)
         except:
             print("Command line upload and Python API Upload failed")
 
@@ -129,7 +130,7 @@ import omero.gateway
 import numpy as np
 
 
-def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
+def '''UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
     # Save the array to a text file
     np.savetxt(fname, array, delimiter=',', fmt='%f')
 
@@ -168,7 +169,7 @@ def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, ver
     if verbose:
         print(f"Upload and linking successful. FileAnnotation ID: {fa.getId()}")
 
-    return fa.getId()
+    return fa.getId()'''
 
 
 
