@@ -1,0 +1,71 @@
+# Apptainer (Singularity) Definition File
+
+Bootstrap: docker
+From: condaforge/mambaforge:4.10.3-10  # Mamba and Conda pre-installed
+
+%labels
+    Maintainer YourName
+    Version 1.1
+    Description "Container with Python 3.8, Conda, Mamba, and scientific packages."
+
+%environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export PATH=/opt/conda/bin:$PATH
+    export CONDA_DIR=/opt/conda
+
+%post
+    # Set non-interactive mode for apt-get
+    export DEBIAN_FRONTEND=noninteractive
+
+    # Update system packages
+    apt-get update && apt-get install -y --no-install-recommends \
+        libffi-dev \
+        build-essential \
+        rsync \
+        curl \
+        wget \
+        vim \
+        bzip2 \
+        ca-certificates \
+        software-properties-common \
+        && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    # Create the Conda environment using Mamba
+    /opt/conda/bin/mamba create -qy -n cellpose_env -c conda-forge -c pytorch -c nvidia -c ome\
+        python=3.8 \
+        pytorch \
+        torchvision \
+        torchaudio \
+        pytorch-cuda=12.1\
+        scikit-image\
+        zarr\
+        dask\
+        matplotlib\
+        statsmodels\
+        zeroc-ice36-python\
+        omero-py
+
+    # Install additional packages via pip directly using environment Python
+    /opt/conda/envs/cellpose_env/bin/python -m pip install cellpose
+    /opt/conda/envs/cellpose_env/bin/python -m pip install --upgrade cellpose
+    /opt/conda/envs/cellpose_env/bin/pip install shapely
+    /opt/conda/envs/cellpose_env/bin/python -m pip install -i https://test.pypi.org/simple/ JonasTools
+
+    # Clean up Conda and pip caches
+    /opt/conda/bin/conda clean -a -y
+    /opt/conda/bin/pip cache purge
+    rm -rf /opt/conda/pkgs/*
+
+%runscript
+    # Use the Python directly from the environment without activation
+    exec /opt/conda/envs/cellpose_env/bin/python "$@"
+
+%test
+    # Directly run the test using the Python from the environment
+    /opt/conda/envs/cellpose_env/bin/python -c "import torch; print(torch.cuda.is_available())"
+
+%help
+    echo "This Apptainer container includes Python 3.8, Conda, Mamba, and scientific packages."
+    echo "To run the container, execute it or start an instance using the appropriate commands."
+
