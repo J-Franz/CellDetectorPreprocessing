@@ -6,53 +6,7 @@ from MainFunctions.get_histogram_dask import get_histogram_dask
 from MainFunctions.save_omero_to_zarr import save_omero_to_zarr
 
 
-def pack_system_arguments():
-    ## Get credentials from first argumentma
-    # run like main.py password
-    user = "Franz"
-    pw = sys.argv[1]
-    imageId = sys.argv[2]
-    base = sys.argv[3]
-    gpu = (sys.argv[4]=="True")
-    try:
-        c_fluorescence = int(sys.argv[5])
-    except IndexError:
-        c_fluorescence = None
-    try:
-        c_dapi = int(sys.argv[6])
-    except IndexError:
-        c_dapi = None
-    # pack sys argv
-    sys_arguments = {"user": user,
-                     "pw": pw,
-                     "imageId": imageId,
-                     "base": base,
-                     "gpu": gpu,
-                     "c_fluorescence": c_fluorescence,
-                     "c_dapi": c_dapi}
-    return sys_arguments
-
-
-
-def pack_parameters():
-    # define parameters:
-    maximum_crop_size = 1000
-    overlap = 100
-    evaluated_crop_size = maximum_crop_size - overlap
-    width = 101
-    height = 101
-    half_width = int(width / 2.)
-    half_height = int(height / 2.)
-    parameters = {"maximum_crop_size": maximum_crop_size,
-                  "overlap": overlap,
-                  "evaluated_crop_size": evaluated_crop_size,
-                  "width": width,
-                  "height": height,
-                  "half_width": int(width / 2.),
-                  "half_height": int(height / 2.)}
-    return parameters
-
-
+from Utils.utils import pack_system_arguments, pack_parameters
 
 
 

@@ -13,7 +13,7 @@ from Utils.utils import extract_system_arguments, unpack_parameters
 
 def extract_cellpose_nucleiV2(sys_arguments, parameters):
 
-    c_dapi, c_fluorescence, imageId, base, gpu, pw, user = extract_system_arguments(sys_arguments)
+    c_dapi, c_fluorescence, imageId, base, gpu, pw, user, omero_instance = extract_system_arguments(sys_arguments)
 
     if gpu:
         use_gpu = False
@@ -30,7 +30,7 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
     os.makedirs(cellpose_path,exist_ok=True)
     # Load image for the first time
 
-    with refresh_omero_session(None, user, pw) as conn:
+    with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
         image = get_image(conn, imageId)
         group_name = image.getDetails().getGroup().getName()
         max_c = image.getSizeC() - 1  # counting starts from 0
@@ -71,7 +71,7 @@ def extract_cellpose_nucleiV2(sys_arguments, parameters):
             print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
             start_time = time.time()
             # To avoid lost connection reconnect every time before downloading
-            with refresh_omero_session(None, user, pw) as conn:
+            with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
                 image = get_image(conn, imageId)
                 pixels = get_pixels(conn, image)
 

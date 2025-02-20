@@ -8,12 +8,12 @@ from Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def save_omero_to_zarr(sys_arguments, parameters):
-    c_dapi, c_fluorescence, imageId, base, gpu, pw, user = extract_system_arguments(sys_arguments)
+    c_dapi, c_fluorescence, imageId, base, gpu, pw, user, omero_instance = extract_system_arguments(sys_arguments)
 
     evaluated_crop_size, half_height, half_width, height, maximum_crop_size, overlap, width = unpack_parameters(
         parameters)
 
-    with refresh_omero_session(None, user, pw) as conn:
+    with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
         image = get_image(conn, imageId)
 
         size_x = image.getSizeX()
@@ -91,7 +91,7 @@ def process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_til
         print("I just started with tile nr.:" + str(nx * ny_tiles + ny))
         start_time = time.time()
     # To avoid lost connection reconnect every time before downloading
-    with refresh_omero_session(None, user, pw) as conn:
+    with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
         image = get_image(conn, imageId)
         pixels = get_pixels(conn, image)
 

@@ -17,11 +17,11 @@ from Utils.utils import extract_system_arguments, unpack_parameters
 
 
 def get_histogram_dask(sys_arguments, parameters):
-    c_dapi, c_fluorescence, imageId, base, gpu, pw, user = extract_system_arguments(sys_arguments)
+    c_dapi, c_fluorescence, imageId, base, gpu, pw, user, omero_instance = extract_system_arguments(sys_arguments)
     evaluated_crop_size, half_height, half_width, height, maximum_crop_size, overlap, width = unpack_parameters(
             parameters)
 
-    with refresh_omero_session(None, user, pw) as conn:
+    with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
         image = get_image(conn, imageId)
         group_id = image.getDetails().getGroup().getId()
         group_name = image.getDetails().getGroup().getName()
@@ -77,7 +77,7 @@ def get_histogram_dask(sys_arguments, parameters):
     for ptissue_id,ptissue in enumerate(polygon_tissue_list):
         # exclude holes first
         fname_upload = str(imageId) + "_CDF_c" + str(c_fluorescence) + "_tissue_"+str(ptissue_id)+"V1.txt"
-        with refresh_omero_session(None, user, pw) as conn:
+        with refresh_omero_session(None, user, pw, instance=omero_instance) as conn:
             image = get_image(conn, imageId)
             already_extracted = check_fname_omero(fname_upload, image)
 

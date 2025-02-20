@@ -7,14 +7,16 @@ import os
 
 import omero
 from omero.gateway import BlitzGateway
+import omero.gateway
 
 
 
-def refresh_omero_session(conn,user,pw,verbose=False):
+
+def refresh_omero_session(conn,user,pw,verbose=False, instance="134.76.18.202"):
     if conn==None:
         USERNAME = user
         PASSWORD = pw
-        HOST = "134.76.18.202"
+        HOST = instance
         PORT=   4064
         if verbose:
             print("Connected.")
@@ -23,10 +25,10 @@ def refresh_omero_session(conn,user,pw,verbose=False):
         session = c.createSession(USERNAME, PASSWORD,  )
         conn = BlitzGateway(client_obj=c)
     else:
-        
+        # does not work currently
         USERNAME = user
         PASSWORD = pw
-        HOST = "wss://134.76.18.202"
+        HOST = f"wss://{instance}"
         PORT=   4064
 
         conn.connect()
@@ -98,10 +100,10 @@ def execute_command(command, verbose=False):
         print(f"Error: {e.stderr}")
         raise  # Re-raise the exception after logging
 
-def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True):
+def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose=True, instance="134.76.18.202"):
     np.savetxt(fname, array, delimiter=',', fmt='%f')
     # Upload file via omero client in bash system steered by python to the omero server and link to the image
-    login_command = "omero login " + user + "@134.76.18.202 -w " + pw + " -g \"" + group_name + "\""
+    login_command = "omero login " + user + f"@{instance} -w " + pw + " -g \"" + group_name + "\""
     try:
         execute_command(login_command, verbose=verbose)
     except:
@@ -126,53 +128,6 @@ def UploadArrayAsTxtToOmero(fname, array, group_name, imageId, pw, user, verbose
             print("Command line upload and Python API Upload failed")
 
     return True
-
-import omero.gateway
-import numpy as np
-
-
-'''def UploadArrayAsTxtToOmero_API(fname, array, group_name, imageId, pw, user, verbose=True):
-    # Save the array to a text file
-    np.savetxt(fname, array, delimiter=',', fmt='%f')
-
-    # Connect to OMERO
-    client = omero.gateway.BlitzGateway(user, pw, group=group_name,
-                                        host='134.76.18.202', secure=True)
-    client.connect()
-
-    if not client.isConnected():
-        raise Exception("Failed to connect to OMERO server")
-
-
-    # Upload the file
-    if verbose:
-        print("Uploading file...")
-    upload_store = client.(fname)
-
-    # Create a FileAnnotation
-    if verbose:
-        print("Creating FileAnnotation...")
-    fa = omero.gateway.FileAnnotationWrapper(client)
-    fa.setFile(upload_store)
-    fa.save()
-
-    # Link the annotation to the image
-    if verbose:
-        print("Linking annotation to image...")
-    image = client.getObject("Image", imageId)
-    image.linkAnnotation(fa)
-
-    # Optionally, you can also add annotations to the image
-    client.getSession().save(image)
-
-    client.close()
-
-    if verbose:
-        print(f"Upload and linking successful. FileAnnotation ID: {fa.getId()}")
-
-    return fa.getId()'''
-
-
 
 def check_fname_omero(fname, image):
     already_extracted = False
