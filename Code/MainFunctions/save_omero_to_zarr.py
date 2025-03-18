@@ -57,11 +57,11 @@ def save_omero_to_zarr(sys_arguments, parameters):
     for nx in range(nx_tiles):  # [nx_tiles-1]:#
         for ny in range(ny_tiles):  # [ny_tiles-2]:#
             process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_tiles, pw, size_c, user, verbose,
-                         z1)
+                         z1, omero_instance=omero_instance)
     return 1
 
 
-def process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_tiles, pw, size_c, user, verbose, z1):
+def process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_tiles, pw, size_c, user, verbose, z1, omero_instance):
     """
     Process a single tile of an image.
 
@@ -77,6 +77,7 @@ def process_tile(evaluated_crop_size, imageId, maximum_crop_size, nx, ny, ny_til
         user (str): The user name for the OMERO connection.
         verbose (bool): Whether to print verbose output.
         z1 (numpy.ndarray): The array to store the processed tile.
+        omero_instance
 
     Returns:
         None: This function updates the z1 array in place.
