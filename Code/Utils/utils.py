@@ -41,7 +41,7 @@ def pack_system_arguments():
     except IndexError:
         c_fluorescence = None
     try:
-        c_dapi = int(sys.argv[6])
+        c_dapi = int(sys.argv[8])
     except IndexError:
         c_dapi = None
     # pack sys argv
